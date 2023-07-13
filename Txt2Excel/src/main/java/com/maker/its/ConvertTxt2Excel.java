@@ -18,13 +18,17 @@ import jxl.write.biff.RowsExceededException;
  * @comment: txt 转 excel；忽略第一行；数据行分隔符支持1F和7C；
  */
 public class ConvertTxt2Excel {
-    private static int lineNum;
-    private static int colNum;
-    private static char splitChar;
-    private static final String charSet = "GBK";
-    private static final List<ColumnObject> columnObjectArrayList = new ArrayList<ColumnObject>();
+    //是否横向打印
+    private static final boolean isLine = true ;
+    private static final String charSet = "UTF-8" ;
     private final static File TXTFILENAME = new File("E:/myTxt2.txt") ;
     private final static File EXCELFILENAME = new File("E:/myTxt2.xls") ;
+
+    private static int lineNum ;
+    private static int colNum ;
+    private static char splitChar ;
+    private static final List<ColumnObject> columnObjectArrayList = new ArrayList<ColumnObject>() ;
+
 
     static {
         try {
@@ -80,8 +84,14 @@ public class ConvertTxt2Excel {
             for (int i = 0; i < lineNum; i++) {
                 ColumnObject p = columnObjectArrayList.get(i);
                 for(int j = 0; j < colNum; j++ ){
-                    Label label = new Label(j,i, p.columnArray[j]);
-                    ws.addCell(label);
+                    if(isLine){
+                        Label label = new Label(j,i, p.columnArray[j]);
+                        ws.addCell(label);
+                    }else{
+                        Label label = new Label(i,j, p.columnArray[j]);
+                        ws.addCell(label);
+                    }
+
                 }
             }
             wwk.write();
